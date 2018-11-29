@@ -22,6 +22,7 @@ impl crate::Rasterize for RustTypeRasterizer {
     }
 
     fn metrics(&self, key: FontKey, size: Size) -> Result<Metrics, Error> {
+        // 96 is windows specific! would be 72 on osx
         let scale = Scale::uniform(size.as_f32_pts() * self.dpi_ratio * 96. / 72.);
         let vmetrics = self.fonts[key.token as usize].v_metrics(scale);
         let hmetrics = self.fonts[key.token as usize]
@@ -33,11 +34,13 @@ impl crate::Rasterize for RustTypeRasterizer {
             .ok_or(Error::MissingGlyph)?
             .scaled(scale)
             .h_metrics();
-        Ok(Metrics {
+        let metrics = Metrics {
             descent: vmetrics.descent,
             average_advance: f64::from(hmetrics.advance_width),
             line_height: f64::from(vmetrics.ascent - vmetrics.descent + vmetrics.line_gap),
-        })
+        };
+        println!("{:#?}", metrics);
+        Ok(metrics)
     }
 
     fn load_font(&mut self, desc: &FontDesc, _size: Size) -> Result<FontKey, Error> {
@@ -124,14 +127,16 @@ impl crate::Rasterize for RustTypeRasterizer {
             buf.push((v * 255.0) as u8);
             buf.push((v * 255.0) as u8);
         });
-        Ok(RasterizedGlyph {
+        let glyph = RasterizedGlyph {
             c: glyph_key.c,
             width: bb.width(),
             height: bb.height(),
             top: -bb.min.y,
             left: bb.min.x,
             buf,
-        })
+        };
+        println!("{:#?}", glyph);
+        Ok(glyph)
     }
 
     fn update_dpr(&mut self, device_pixel_ratio: f32) {

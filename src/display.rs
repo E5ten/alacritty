@@ -261,7 +261,7 @@ impl Display {
 
         // Prevent invalid cell sizes
         if cell_width < 1. || cell_height < 1. {
-            panic!("font offset is too small");
+            panic!("font offset is too small. cell_width: {} cell_height: {}", cell_width, cell_height);
         }
 
         Ok((glyph_cache, cell_width.floor(), cell_height.floor()))
@@ -488,4 +488,3 @@ impl Display {
         self.window().set_ime_spot(LogicalPosition::from((nspot_x, nspot_y)));
     }
 }
-

@@ -6,6 +6,8 @@ use self::rusttype::{point, Codepoint, FontCollection, Scale};
 
 use super::{FontDesc, FontKey, GlyphKey, Metrics, RasterizedGlyph, Size, Slant, Style, Weight};
 
+use log::trace;
+
 pub struct RustTypeRasterizer {
     fonts: Vec<rusttype::Font<'static>>,
     dpi_ratio: f32,
@@ -39,7 +41,6 @@ impl crate::Rasterize for RustTypeRasterizer {
             average_advance: f64::from(hmetrics.advance_width),
             line_height: f64::from(vmetrics.ascent - vmetrics.descent + vmetrics.line_gap),
         };
-        println!("{:#?}", metrics);
         Ok(metrics)
     }
 
@@ -135,7 +136,7 @@ impl crate::Rasterize for RustTypeRasterizer {
             left: bb.min.x,
             buf,
         };
-        println!("{:#?}", glyph);
+        trace!("glyph {} top {} left {} width {} height {}", glyph_key.c, -bb.min.y, bb.min.x, bb.width(), bb.height());
         Ok(glyph)
     }
 

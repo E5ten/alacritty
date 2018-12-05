@@ -2005,6 +2005,8 @@ impl Default for Font {
             scale_with_dpi: None,
             glyph_offset: Default::default(),
             offset: Default::default(),
+            rasterization_method: font::RasterizationMethod::SubpixelAa,
+            hinting: font::HintingOptions::Vertical
         }
     }
 }

@@ -359,6 +359,12 @@ pub enum RasterizationMethod {
     SubpixelAa
 }
 
+impl Default for RasterizationMethod {
+    fn default() -> Self {
+        RasterizationMethod::SubpixelAa
+    }
+}
+
 #[derive(Debug, Deserialize, Clone, Copy)]
 pub enum HintingOptions {
     None,
@@ -376,6 +382,13 @@ impl HintingOptions {
             HintingOptions::VerticalSubpixel => font_kit::hinting::HintingOptions::VerticalSubpixel(size),
             HintingOptions::Full => font_kit::hinting::HintingOptions::Full(size),
         }
+    }
+}
+
+impl Default for HintingOptions {
+    fn default() -> Self {
+        // TODO: Evaluate appropriate defaults on all platforms
+        HintingOptions::Full
     }
 }
 
